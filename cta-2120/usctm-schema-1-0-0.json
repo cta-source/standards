@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdn.cta.tech/cta-2120/usctm-schema-1-0-0.json",
+  "title": "USCTM Registry and Label Data Definitions",
+  "description": "Registry and label data for Layer 1 and Layer 2 of the US Cyber Trust Mark label for certified products.",
+  "$comment": "USCTM Schema Version 1.0.0",
+  "type": "object",
+  "if": {
+    "$comment": "if security_update_information/update_default is Other, or if security_update_information/update_options includes Other, then  security_update_information_other is required",
+    "properties": {
+      "security_update_information": {
+        "anyOf": [
+          {
+            "properties": {
+              "update_default": {
+                "const": "Other"
+              }
+            }
+          },
+          {
+            "properties": {
+              "update_options": {
+                "contains": {
+                  "const": "Other"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "then": {
+    "required": [ "security_update_information_other" ]
+  },
+  "required": [
+    "schema_version",
+    "QR_code_url",
+    "sensor_data_collection",
+    "product_name",
+    "manufacturer_name",
+    "authorization_date",
+    "authorized_by",
+    "tested_by",
+    "access_control",
+    "securing_this_product",
+    "security_update_information",
+    "support_date",
+    "version_and_model_numbers",
+    "delete_data",
+    "account_deactivation",
+    "encryption_and_key_management",
+    "general_user_information",
+    "security_contact",
+    "created",
+    "sbom_hbom_available",
+    "modified"
+  ],
+  "properties": {
+    "QR_code_url": {
+      "$comment": "URL embedded in the QR Code",
+      "$ref": "#/$defs/saneUrl",
+      "type": "string"
+    },
+    "account_deactivation": {
+      "$ref": "#/$defs/urlType",
+      "type": "object"
+    },
+    "authorization_date": {
+      "$ref": "#/$defs/dateType",
+      "type": "string"
+    },
+    "authorized_by": {
+      "type": "object",
+      "properties": {
+        "contact": {
+          "$ref": "#/$defs/stringType",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/stringType",
+          "type": "string"
+        }
+      }
+    },
+    "created": {
+      "$ref": "#/$defs/dateTimeType",
+      "type": "string"
+    },
+    "delete_data": {
+      "$ref": "#/$defs/urlType",
+      "type": "object"
+    },
+    "encryption_and_key_management": {
+      "$ref": "#/$defs/urlType",
+      "type": "object"
+    },
+    "general_user_information": {
+      "$ref": "#/$defs/urlType",
+      "type": "object"
+    },
+    "manufacturer_name": {
+      "$ref": "#/$defs/stringType",
+      "type": "string"
+    },
+    "modified": {
+      "$ref": "#/$defs/dateTimeType",
+      "type": "string"
+    },
+    "access_control": {
+      "type": "object",
+      "properties": {
+        "$if": {
+          "properties": {
+            "password_options": {
+              "contains": {
+                "const": "password"
+              }
+            }
+          }
+        },
+        "$then": {
+          "properties": {
+            "object": {
+              "password_type": {
+                "type": "string",
+                "oneOf": [ "factory_default", "user_generated" ]
+              }
+            }
+          },
+          "$if": {
+            "properties": {
+              "password_type": {
+                "const": "factory_default"
+              }
+            }
+          },
+          "$then": {
+            "properties": {
+              "user_changeable": {
+                "default": true,
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "password_change": {
+          "object": {
+            "properties": {
+              "text": {
+                "$ref": "#/$defs/stringType",
+                "type": "string"
+              },
+              "url": {
+                "$ref": "#/$defs/saneUrl",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "password_factory_default": {
+          "type": "string",
+          "oneOf": [
+            { "const": "password" }, 
+            { "const": "biometric" }, 
+            { "const": "passkey" }, 
+            { "const": "MFA" },
+            { "const": "no_control" }, 
+            { "const": "multi_account" }, 
+            { "const": "single_account" }, 
+            { "const": "optional_account" }, 
+            { "const": "no_account" }, 
+            { "const": "not_disclosed" } 
+          ]
+        },
+        "password_options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "anyOf": [
+              { "const": "password" }, 
+              { "const": "biometric" }, 
+              { "const": "passkey" }, 
+              { "const": "MFA" },
+              { "const": "no_control" }, 
+              { "const": "multi_account" }, 
+              { "const": "single_account" }, 
+              { "const": "optional_account" }, 
+              { "const": "no_account" }, 
+              { "const": "not_disclosed" } 
+            ]
+          }
+        }
+      }
+    },
+    "product_manufacturer": {
+      "$ref": "#/$defs/stringType",
+      "type": "string"
+    },
+    "product_model": {
+      "$ref": "#/$defs/stringType",
+      "type": "string"
+    },
+    "product_name": {
+      "$ref": "#/$defs/stringType",
+      "type": "string"
+    },
+    "sbom_hbom_maintained": {
+      "$comment": "This should have default values; it should also not be required when the default cases are correct",
+      "type": "object",
+      "properties": {
+        "hbom_maintained": {
+          "default": false,
+          "type": "boolean"
+        },
+        "sbom_maintained": {
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "securing_this_product": {
+      "$ref": "#/$defs/urlType",
+      "type": "object"
+    },
+    "security_contact": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/saneUrl",
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "format": "email",
+          "maxLength": 2048
+        }
+      ]
+    },
+    "security_update_information": {
+      "type": "object",
+      "properties": {
+        "update_default": {
+          "type": "string",
+          "enum": [
+            "Automatic - may opt out",
+            "Automatic - may not opt out",
+            "Manual",
+            "Consent based",
+            "No updates",
+            "Not disclosed",
+            "Other"
+          ]
+        },
+        "update_options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "anyOf": [
+              { "const": "Automatic - may opt out" }, 
+              { "const": "Automatic - may not opt out" }, 
+              { "const": "Manual" }, 
+              { "const": "Consent based" }, 
+              { "const": "No updates" }, 
+              { "const": "Not disclosed" }, 
+              { "const": "Other" } 
+            ]
+          }
+        }
+      }
+    },
+    "security_update_information_other": {
+      "$ref": "#/$defs/stringType",
+      "type": "string"
+    },
+    "sensor_data_collection": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "$comment": "might want to limit size of this string",
+            "$ref": "#/$defs/stringType",
+            "type": "string"
+          },
+          "has": {
+            "default": true,
+            "type": "boolean"
+          },
+          "icons": {
+            "$ref": "#/$defs/iconsType",
+            "type": "object"
+          },
+          "sensing": {
+            "$ref": "#/$defs/stringType",
+            "type": "string",
+            "oneOf": [
+              { "const": "audio" },
+              { "const": "images" },
+              { "const": "position" }
+            ]
+          }
+        }
+      }
+    },
+    "support_date": {
+      "$comment": "note that support_date is a day only, no time information",
+      "$ref": "#/$defs/dateType",
+      "type": "string"
+    },
+    "tested_by": {
+      "type": "object",
+      "properties": {
+        "contact": {
+          "$ref": "#/$defs/stringType",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/stringType",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "dateTimeType": {
+      "$comment": "ISO 8601, RFC 3339, see date-time ABNF",
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateType": {
+      "$comment": "ISO 8601, RFC 3339, see full-date ABNF",
+      "type": "string",
+      "format": "date"
+    },
+    "iconsType": {
+      "$comment": "sizes specified below are placeholders; expansion to other sizes is anticipated",
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "128": {
+          "$ref": "#/$defs/saneUrl"
+        },
+        "16": {
+          "description": "url to a 16x16 icon",
+          "$ref": "#/$defs/saneUrl"
+        },
+        "256": {
+          "$ref": "#/$defs/saneUrl"
+        },
+        "48": {
+          "$ref": "#/$defs/saneUrl"
+        }
+      }
+    },
+    "saneUrl": {
+      "$comment": "maxLength should include ideas about label size & text; URLs can of course be very long",
+      "pattern": "^https?://",
+      "format": "uri",
+      "maxLength": 2048,
+      "minLength": 15
+    },
+    "stringType": {
+      "maxLength": 2048
+    },
+    "urlType": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/stringType",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/saneUrl",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
