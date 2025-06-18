@@ -17,6 +17,6 @@ This is the approved version of the CTA-2120 schema as of June 18, 2025 (Version
 
 This is a mockup of the intended label rendering for the consumer. It shows the "L1" label rendering on the left (i.e., the "consumer friendly" version 
 pointed to by the URL encoded in the product QR code), and the more technical "L2" rendering. This mockup is for reference only.   
-  * CTA - Mockup of CTA-2120 Label - as proposed.png
+  * Label_Sample.png
     
 For the technical standard that references these files, see [CTA-2120 download](https://www.cta.tech/standards/cta-2120/). 
