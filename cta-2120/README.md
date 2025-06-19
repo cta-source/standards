@@ -6,6 +6,8 @@ Provided here are black and grey EPS/SVG/PNG versions of sensor icons used in th
 indicate "product has this sensor", grey to indicate "product doesn't have this sensor", see CTA-2120 for details)_. Files are 
 provided with multiple resolutions for the PNG versions.  
 
+These icons are not square. 
+
 The following is the approved version of the CTA-2120 schema as of June 18, 2025 (Version 1.0.0). Matches CTA-2120 (June 2025).
   * usctm-schema-1-0-0.json
 
